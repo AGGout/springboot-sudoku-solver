@@ -1,4 +1,4 @@
-package org.alex.example.model;
+package org.alex.sudoku.model;
 
 import java.util.Arrays;
 
