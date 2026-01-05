@@ -1,9 +1,8 @@
-package org.alex.sudoku.controller;
+package org.alex.sudoku;
 
 import org.alex.sudoku.model.SudokuRequest;
 import org.alex.sudoku.model.SudokuResponse;
 import org.alex.sudoku.model.SudokuStep;
-import org.alex.sudoku.service.SudokuSolver;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 

@@ -1,15 +1,27 @@
-package org.alex.sudoku.service;
+package org.alex.sudoku;
 
-import org.alex.sudoku.model.StepType;
+import org.alex.sudoku.backtracking.BacktrackingSolver;
+import org.alex.sudoku.backtracking.Position;
+import org.alex.sudoku.backtracking.SudokuProblem;
 import org.alex.sudoku.model.SudokuStep;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * High-level Sudoku solver service.
+ * Uses the generic backtracking framework for solving.
+ * keeps a record of moves for demonstration purposes
+ */
 @Service
 public class SudokuSolver {
 
     private static final int SIZE = 9;
+    private final BacktrackingSolver<int[][], Position, Integer> solver;
+
+    public SudokuSolver() {
+        this.solver = new BacktrackingSolver<>();
+    }
 
     /**
      * Public API: solves a Sudoku.
@@ -22,7 +34,10 @@ public class SudokuSolver {
     public int[][] solve(int[][] original, List<SudokuStep> steps) {
         validate(original);
         int[][] grid = deepCopy(original);
-        boolean solved = solveInternal(grid, steps);
+
+        SudokuProblem problem = new SudokuProblem(steps);
+        boolean solved = solver.solve(grid, problem);
+
         return solved ? grid : null;
     }
 
@@ -33,70 +48,7 @@ public class SudokuSolver {
         return solve(original, null);
     }
 
-    // === internal backtracking ===
-
-    private boolean solveInternal(int[][] grid, List<SudokuStep> steps) {
-        int[] empty = findEmpty(grid);
-        if (empty == null) {
-            return true;
-        }
-
-        int row = empty[0];
-        int col = empty[1];
-
-        for (int num = 1; num <= 9; num++) {
-            if (isSafe(grid, row, col, num)) {
-                grid[row][col] = num;
-                if (steps != null) {
-                    steps.add(new SudokuStep(row, col, num, StepType.PLACE));
-                }
-
-                if (solveInternal(grid, steps)) {
-                    return true;
-                }
-
-                grid[row][col] = 0;
-                if (steps != null) {
-                    steps.add(new SudokuStep(row, col, 0, StepType.BACKTRACK));
-                }
-            }
-        }
-        return false;
-    }
-
-    // === helpers ===
-
-    private int[] findEmpty(int[][] grid) {
-        for (int r = 0; r < SIZE; r++) {
-            for (int c = 0; c < SIZE; c++) {
-                if (grid[r][c] == 0) return new int[]{r, c};
-            }
-        }
-        return null;
-    }
-
-    private boolean isSafe(int[][] grid, int row, int col, int num) {
-        return !usedInRow(grid, row, num)
-                && !usedInCol(grid, col, num)
-                && !usedInBox(grid, row - row % 3, col - col % 3, num);
-    }
-
-    private boolean usedInRow(int[][] grid, int row, int num) {
-        for (int c = 0; c < SIZE; c++) if (grid[row][c] == num) return true;
-        return false;
-    }
-
-    private boolean usedInCol(int[][] grid, int col, int num) {
-        for (int r = 0; r < SIZE; r++) if (grid[r][col] == num) return true;
-        return false;
-    }
-
-    private boolean usedInBox(int[][] grid, int boxRow, int boxCol, int num) {
-        for (int r = 0; r < 3; r++)
-            for (int c = 0; c < 3; c++)
-                if (grid[boxRow + r][boxCol + c] == num) return true;
-        return false;
-    }
+    // === validation and utility methods ===
 
     private void validate(int[][] grid) {
         if (grid == null || grid.length != SIZE) {
