@@ -13,6 +13,7 @@ import java.util.List;
 public class SudokuProblem implements BacktrackingProblem<int[][], Position, Integer> {
 
     private static final int SIZE = 9;
+    private static final int BOX_SIZE = 3;
     private static final int EMPTY = 0;
     private final List<SudokuStep> steps;
 
@@ -54,7 +55,7 @@ public class SudokuProblem implements BacktrackingProblem<int[][], Position, Int
     public Iterable<Integer> getCandidates(int[][] state, Position position) {
         // For Sudoku, candidates are always numbers 1-9
         List<Integer> candidates = new ArrayList<>();
-        for (int num = 1; num <= 9; num++) {
+        for (int num = 1; num <= SIZE; num++) {
             candidates.add(num);
         }
         return candidates;
@@ -67,7 +68,7 @@ public class SudokuProblem implements BacktrackingProblem<int[][], Position, Int
 
         return !usedInRow(state, row, value)
                 && !usedInCol(state, col, value)
-                && !usedInBox(state, row - row % 3, col - col % 3, value);
+                && !usedInBox(state, row - row % BOX_SIZE, col - col % BOX_SIZE, value);
     }
 
     @Override
@@ -115,8 +116,8 @@ public class SudokuProblem implements BacktrackingProblem<int[][], Position, Int
     }
 
     private boolean usedInBox(int[][] grid, int boxRow, int boxCol, int num) {
-        for (int r = 0; r < 3; r++) {
-            for (int c = 0; c < 3; c++) {
+        for (int r = 0; r < BOX_SIZE; r++) {
+            for (int c = 0; c < BOX_SIZE; c++) {
                 if (grid[boxRow + r][boxCol + c] == num) {
                     return true;
                 }

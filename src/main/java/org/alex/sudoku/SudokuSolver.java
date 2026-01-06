@@ -60,7 +60,7 @@ public class SudokuSolver {
             }
             for (int c = 0; c < SIZE; c++) {
                 int v = grid[r][c];
-                if (v < 0 || v > 9) {
+                if (v < 0 || v > SIZE) {
                     throw new IllegalArgumentException("Cell values must be 0..9");
                 }
             }
