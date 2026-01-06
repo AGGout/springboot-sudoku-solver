@@ -52,16 +52,16 @@ public class SudokuSolver {
 
     private void validate(int[][] grid) {
         if (grid == null || grid.length != SIZE) {
-            throw new IllegalArgumentException("Grid must be 9x9");
+            throw new IllegalArgumentException("Grid must be " + SIZE + "x" + SIZE);
         }
         for (int r = 0; r < SIZE; r++) {
             if (grid[r] == null || grid[r].length != SIZE) {
-                throw new IllegalArgumentException("Grid must be 9x9");
+                throw new IllegalArgumentException("Grid must be " + SIZE + "x" + SIZE);
             }
             for (int c = 0; c < SIZE; c++) {
                 int v = grid[r][c];
                 if (v < 0 || v > SIZE) {
-                    throw new IllegalArgumentException("Cell values must be 0..9");
+                    throw new IllegalArgumentException("Cell values must be 0.." + SIZE);
                 }
             }
         }

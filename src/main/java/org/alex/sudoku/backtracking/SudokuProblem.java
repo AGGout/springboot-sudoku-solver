@@ -53,7 +53,7 @@ public class SudokuProblem implements BacktrackingProblem<int[][], Position, Int
 
     @Override
     public Iterable<Integer> getCandidates(int[][] state, Position position) {
-        // For Sudoku, candidates are always numbers 1-9
+        // For Sudoku, candidates are always numbers 1-SIZE
         List<Integer> candidates = new ArrayList<>();
         for (int num = 1; num <= SIZE; num++) {
             candidates.add(num);

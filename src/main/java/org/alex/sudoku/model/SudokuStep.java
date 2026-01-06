@@ -3,7 +3,7 @@ package org.alex.sudoku.model;
 public class SudokuStep {
     private int row;
     private int col;
-    private int value;     // for PLACE: 1..9, for BACKTRACK: 0
+    private int value;     // for PLACE: 1..SIZE, for BACKTRACK: 0
     private StepType type;
 
     public SudokuStep() {}
